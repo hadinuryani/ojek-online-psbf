@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - OjekOnline'">Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="d-flex">
+        <div th:replace="~{fragments/left-menu :: left-menu}"></div>
+        <main class="main-content flex-grow-1">
+            <div class="container-fluid p-4">
+
+                <!-- Flash Messages -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i><span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+                        <p class="text-muted mb-0">Selamat datang di OjekOnline Admin Panel</p>
+                    </div>
+                </div>
+
+                <!-- Stats Cards Row 1 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm border-start border-4 border-primary">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Users</p>
+                                        <h3 class="fw-bold mb-0" th:text="${totalUsers}">0</h3>
+                                    </div>
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:50px;height:50px;">
+                                        <i class="bi bi-people text-primary fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm border-start border-4 border-success">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Drivers</p>
+                                        <h3 class="fw-bold mb-0" th:text="${totalDrivers}">0</h3>
+                                    </div>
+                                    <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:50px;height:50px;">
+                                        <i class="bi bi-person-badge text-success fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm border-start border-4 border-warning">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Rides</p>
+                                        <h3 class="fw-bold mb-0" th:text="${totalRides}">0</h3>
+                                    </div>
+                                    <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:50px;height:50px;">
+                                        <i class="bi bi-geo-alt text-warning fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm border-start border-4 border-info">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Payments</p>
+                                        <h3 class="fw-bold mb-0" th:text="${totalPayments}">0</h3>
+                                    </div>
+                                    <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:50px;height:50px;">
+                                        <i class="bi bi-credit-card text-info fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards Row 2 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-person-heart text-danger fs-2"></i>
+                                <h4 class="fw-bold mt-2" th:text="${totalCustomers}">0</h4>
+                                <p class="text-muted small mb-0">Customers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-journal-check text-primary fs-2"></i>
+                                <h4 class="fw-bold mt-2" th:text="${totalBookings}">0</h4>
+                                <p class="text-muted small mb-0">Bookings</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-truck text-secondary fs-2"></i>
+                                <h4 class="fw-bold mt-2" th:text="${totalVehicles}">0</h4>
+                                <p class="text-muted small mb-0">Vehicles</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card border-0 shadow-sm text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-hourglass-split text-warning fs-2"></i>
+                                <h4 class="fw-bold mt-2" th:text="${pendingDrivers}">0</h4>
+                                <p class="text-muted small mb-0">Pending Driver Apps</p>
+                                <a th:href="@{/admin/driver-applications}" class="btn btn-warning btn-sm mt-2">Review</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Row -->
+                <div class="row g-4">
+                    <!-- Recent Rides -->
+                    <div class="col-md-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4">
+                                <h5 class="fw-bold"><i class="bi bi-geo-alt text-warning me-2"></i>Ride Terbaru</h5>
+                            </div>
+                            <div class="card-body px-4 pb-4">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>#ID</th>
+                                                <th>Customer</th>
+                                                <th>Driver</th>
+                                                <th>Fare</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="ride : ${recentRides}">
+                                                <td th:text="'#' + ${ride.id}"></td>
+                                                <td th:text="${ride.customer?.user?.fullName ?: '-'}"></td>
+                                                <td th:text="${ride.driver?.user?.fullName ?: 'Unassigned'}"></td>
+                                                <td th:text="'Rp ' + ${#numbers.formatDecimal(ride.fare, 0, 'COMMA', 0, 'POINT')}"></td>
+                                                <td>
+                                                    <span class="badge"
+                                                          th:classappend="${ride.rideStatus?.name == 'COMPLETED'} ? 'bg-success' : (${ride.rideStatus?.name == 'CANCELLED'} ? 'bg-danger' : (${ride.rideStatus?.name == 'ACCEPTED'} ? 'bg-info' : 'bg-warning'))"
+                                                          th:text="${ride.rideStatus?.name ?: 'N/A'}"></span>
+                                                </td>
+                                            </tr>
+                                            <tr th:if="${#lists.isEmpty(recentRides)}">
+                                                <td colspan="5" class="text-center text-muted py-3">Belum ada ride</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <a th:href="@{/rides}" class="btn btn-outline-warning btn-sm">Lihat Semua Rides</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Applications -->
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4">
+                                <h5 class="fw-bold"><i class="bi bi-person-check text-success me-2"></i>Aplikasi Driver Pending</h5>
+                            </div>
+                            <div class="card-body px-4 pb-4">
+                                <div th:each="driver : ${pendingApplications}" class="d-flex align-items-center mb-3 p-2 rounded bg-light">
+                                    <i class="bi bi-person-circle fs-3 text-secondary me-3"></i>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 fw-semibold small" th:text="${driver.user?.fullName ?: '-'}"></p>
+                                        <p class="mb-0 text-muted" style="font-size:0.75rem;" th:text="${driver.licenseNumber}"></p>
+                                    </div>
+                                    <a th:href="@{/drivers/{id}/approve(id=${driver.id})}" class="btn btn-success btn-sm">✓</a>
+                                </div>
+                                <p th:if="${#lists.isEmpty(pendingApplications)}" class="text-muted small text-center py-2">Tidak ada aplikasi pending</p>
+                                <a th:href="@{/admin/driver-applications}" class="btn btn-outline-success btn-sm w-100 mt-2">Lihat Semua</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

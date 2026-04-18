@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head><title>Left Menu</title></head>
+<body>
+<nav th:fragment="left-menu" class="sidebar bg-dark" id="sidebarMenu">
+    <div class="sidebar-content">
+        <div class="sidebar-header text-center py-3">
+            <i class="bi bi-scooter text-warning" style="font-size: 2rem;"></i>
+            <p class="text-light mb-0 mt-1 small" sec:authentication="name">User</p>
+        </div>
+        <hr class="text-secondary mx-3">
+        <ul class="nav flex-column px-2">
+
+            <!-- ============ ADMIN MENU ============ -->
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/admin/dashboard}">
+                    <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('ADMIN')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Kelola Data</li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/users}">
+                    <i class="bi bi-people"></i> <span>Users</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/admin/driver-applications}">
+                    <i class="bi bi-person-check"></i> <span>Aplikasi Driver</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/drivers}">
+                    <i class="bi bi-person-badge"></i> <span>Drivers</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/customers}">
+                    <i class="bi bi-person-heart"></i> <span>Customers</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('ADMIN')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Operasional</li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/rides}">
+                    <i class="bi bi-geo-alt"></i> <span>All Rides</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/vehicles}">
+                    <i class="bi bi-truck"></i> <span>Vehicles</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/locations}">
+                    <i class="bi bi-pin-map"></i> <span>Locations</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('ADMIN')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Keuangan</li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/payments}">
+                    <i class="bi bi-credit-card"></i> <span>Payments</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/wallets}">
+                    <i class="bi bi-wallet2"></i> <span>Wallets</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('ADMIN')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Lainnya</li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/ratings}">
+                    <i class="bi bi-star"></i> <span>Ratings</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/promos}">
+                    <i class="bi bi-gift"></i> <span>Promos</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link sidebar-link" th:href="@{/notifications}">
+                    <i class="bi bi-bell"></i> <span>Notifications</span>
+                </a>
+            </li>
+
+            <!-- ============ DRIVER MENU ============ -->
+            <li class="nav-item" sec:authorize="hasRole('DRIVER')">
+                <a class="nav-link sidebar-link" th:href="@{/driver/dashboard}">
+                    <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('DRIVER')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Pesanan</li>
+            <li class="nav-item" sec:authorize="hasRole('DRIVER')">
+                <a class="nav-link sidebar-link" th:href="@{/driver/incoming-rides}">
+                    <i class="bi bi-bell-fill"></i> <span>Pesanan Masuk</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('DRIVER')">
+                <a class="nav-link sidebar-link" th:href="@{/driver/my-rides}">
+                    <i class="bi bi-clock-history"></i> <span>Riwayat Ride</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('DRIVER')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Kendaraan</li>
+            <li class="nav-item" sec:authorize="hasRole('DRIVER')">
+                <a class="nav-link sidebar-link" th:href="@{/driver/my-vehicle}">
+                    <i class="bi bi-truck"></i> <span>Kendaraan Saya</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('DRIVER')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Lainnya</li>
+            <li class="nav-item" sec:authorize="hasRole('DRIVER')">
+                <a class="nav-link sidebar-link" th:href="@{/driver/notifications}">
+                    <i class="bi bi-bell"></i> <span>Notifikasi</span>
+                </a>
+            </li>
+
+            <!-- ============ CUSTOMER MENU ============ -->
+            <li class="nav-item" sec:authorize="hasRole('CUSTOMER')">
+                <a class="nav-link sidebar-link" th:href="@{/customer/dashboard}">
+                    <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('CUSTOMER')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Pesan Ojek</li>
+            <li class="nav-item" sec:authorize="hasRole('CUSTOMER')">
+                <a class="nav-link sidebar-link" th:href="@{/customer/book-ride}">
+                    <i class="bi bi-geo-alt-fill"></i> <span>Pesan Ride</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('CUSTOMER')">
+                <a class="nav-link sidebar-link" th:href="@{/customer/my-rides}">
+                    <i class="bi bi-clock-history"></i> <span>Riwayat Ride</span>
+                </a>
+            </li>
+
+            <li sec:authorize="hasRole('CUSTOMER')" class="sidebar-heading text-uppercase text-muted small px-3 mt-3 mb-1">Akun</li>
+            <li class="nav-item" sec:authorize="hasRole('CUSTOMER')">
+                <a class="nav-link sidebar-link" th:href="@{/customer/wallet}">
+                    <i class="bi bi-wallet2"></i> <span>Wallet</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('CUSTOMER')">
+                <a class="nav-link sidebar-link" th:href="@{/customer/apply-driver}">
+                    <i class="bi bi-person-badge"></i> <span>Daftar Jadi Driver</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('CUSTOMER')">
+                <a class="nav-link sidebar-link" th:href="@{/customer/notifications}">
+                    <i class="bi bi-bell"></i> <span>Notifikasi</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>

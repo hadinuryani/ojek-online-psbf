@@ -1,0 +1,6 @@
+com\ojek\online\entity\DriverPromo.class
+com\ojek\online\entity\Notification.class
+com\ojek\online\entity\DriverPromo$DriverPromoBuilder.class
+com\ojek\online\entity\Promo$PromoBuilder.class
+com\ojek\online\entity\Notification$NotificationBuilder.class
+com\ojek\online\entity\Promo.class

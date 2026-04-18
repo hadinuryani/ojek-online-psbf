@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - OjekOnline'">Customer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="d-flex">
+        <div th:replace="~{fragments/left-menu :: left-menu}"></div>
+        <main class="main-content flex-grow-1">
+            <div class="container-fluid p-4">
+
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle me-2"></i><span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Welcome Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">Halo, <span th:text="${user?.fullName}">Customer</span>! 👋</h2>
+                        <p class="text-muted mb-0">Mau kemana hari ini?</p>
+                    </div>
+                    <a th:href="@{/customer/book-ride}" class="btn btn-warning btn-lg">
+                        <i class="bi bi-geo-alt-fill me-2"></i>Pesan Ride Sekarang
+                    </a>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-primary text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-geo-alt text-primary fs-2"></i>
+                                <h3 class="fw-bold mt-2" th:text="${totalRides}">0</h3>
+                                <p class="text-muted small mb-0">Total Rides</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-warning text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-hourglass-split text-warning fs-2"></i>
+                                <h3 class="fw-bold mt-2" th:text="${activeRides}">0</h3>
+                                <p class="text-muted small mb-0">Ride Aktif</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-success text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-check-circle text-success fs-2"></i>
+                                <h3 class="fw-bold mt-2" th:text="${completedRides}">0</h3>
+                                <p class="text-muted small mb-0">Selesai</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-info text-center">
+                            <div class="card-body py-4">
+                                <i class="bi bi-wallet2 text-info fs-2"></i>
+                                <h3 class="fw-bold mt-2" th:text="'Rp ' + ${#numbers.formatDecimal(wallet?.balance ?: 0, 0, 'COMMA', 0, 'POINT')}">Rp 0</h3>
+                                <p class="text-muted small mb-0">Saldo Wallet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Recent Rides -->
+                    <div class="col-md-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold mb-0"><i class="bi bi-clock-history text-primary me-2"></i>Ride Terbaru</h5>
+                                <a th:href="@{/customer/my-rides}" class="btn btn-outline-primary btn-sm">Lihat Semua</a>
+                            </div>
+                            <div class="card-body px-4 pb-4">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>#ID</th>
+                                                <th>Driver</th>
+                                                <th>Tujuan</th>
+                                                <th>Fare</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="ride : ${recentRides}">
+                                                <td th:text="'#' + ${ride.id}"></td>
+                                                <td th:text="${ride.driver?.user?.fullName ?: 'Mencari driver...'}"></td>
+                                                <td th:text="${ride.route?.dropoffLocation?.name ?: '-'}"></td>
+                                                <td th:text="'Rp ' + ${#numbers.formatDecimal(ride.fare, 0, 'COMMA', 0, 'POINT')}"></td>
+                                                <td>
+                                                    <span class="badge"
+                                                          th:classappend="${ride.rideStatus?.name == 'COMPLETED'} ? 'bg-success' : (${ride.rideStatus?.name == 'CANCELLED'} ? 'bg-danger' : (${ride.rideStatus?.name == 'ACCEPTED'} ? 'bg-info' : 'bg-warning'))"
+                                                          th:text="${ride.rideStatus?.name ?: 'N/A'}"></span>
+                                                </td>
+                                            </tr>
+                                            <tr th:if="${#lists.isEmpty(recentRides)}">
+                                                <td colspan="5" class="text-center text-muted py-3">Belum ada ride</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm mb-3">
+                            <div class="card-body px-4 py-4">
+                                <h6 class="fw-bold mb-3"><i class="bi bi-lightning-charge text-warning me-2"></i>Aksi Cepat</h6>
+                                <div class="d-grid gap-2">
+                                    <a th:href="@{/customer/book-ride}" class="btn btn-warning text-start">
+                                        <i class="bi bi-geo-alt-fill me-2"></i>Pesan Ride
+                                    </a>
+                                    <a th:href="@{/customer/wallet}" class="btn btn-outline-info text-start">
+                                        <i class="bi bi-wallet2 me-2"></i>Top Up Wallet
+                                    </a>
+                                    <a th:href="@{/customer/my-rides}" class="btn btn-outline-primary text-start">
+                                        <i class="bi bi-clock-history me-2"></i>Riwayat Ride
+                                    </a>
+                                    <a th:if="${!hasDriverApplication}" th:href="@{/customer/apply-driver}" class="btn btn-outline-success text-start">
+                                        <i class="bi bi-person-badge me-2"></i>Daftar Jadi Driver
+                                    </a>
+                                    <div th:if="${hasDriverApplication}" class="alert alert-info mb-0 py-2">
+                                        <small>
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            Status driver: <strong th:text="${driverApplication?.applicationStatus}">PENDING</strong>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wallet Card -->
+                        <div class="card border-0 shadow-sm bg-primary text-white">
+                            <div class="card-body px-4 py-4">
+                                <p class="small mb-1 opacity-75">Saldo Wallet</p>
+                                <h4 class="fw-bold mb-3" th:text="'Rp ' + ${#numbers.formatDecimal(wallet?.balance ?: 0, 0, 'COMMA', 0, 'POINT')}">Rp 0</h4>
+                                <a th:href="@{/customer/wallet}" class="btn btn-light btn-sm">
+                                    <i class="bi bi-plus-circle me-1"></i>Top Up
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

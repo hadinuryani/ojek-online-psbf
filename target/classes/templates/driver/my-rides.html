@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - OjekOnline'">My Rides</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="d-flex">
+        <div th:replace="~{fragments/left-menu :: left-menu}"></div>
+        <main class="main-content flex-grow-1">
+            <div class="container-fluid p-4">
+
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle me-2"></i><span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold" th:text="${pageTitle}">My Rides History</h2>
+                    <a th:href="@{/driver/dashboard}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Dashboard
+                    </a>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#ID</th>
+                                        <th>Customer</th>
+                                        <th>Pickup</th>
+                                        <th>Dropoff</th>
+                                        <th>Fare</th>
+                                        <th>Status</th>
+                                        <th>Waktu</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="ride : ${rides}">
+                                        <td th:text="'#' + ${ride.id}"></td>
+                                        <td th:text="${ride.customer?.user?.fullName ?: '-'}"></td>
+                                        <td th:text="${ride.route?.pickupLocation?.name ?: '-'}"></td>
+                                        <td th:text="${ride.route?.dropoffLocation?.name ?: '-'}"></td>
+                                        <td th:text="'Rp ' + ${#numbers.formatDecimal(ride.fare, 0, 'COMMA', 0, 'POINT')}"></td>
+                                        <td>
+                                            <span class="badge"
+                                                  th:classappend="${ride.rideStatus?.name == 'COMPLETED'} ? 'bg-success' : (${ride.rideStatus?.name == 'CANCELLED'} ? 'bg-danger' : (${ride.rideStatus?.name == 'ACCEPTED'} ? 'bg-info' : 'bg-warning'))"
+                                                  th:text="${ride.rideStatus?.name ?: 'N/A'}"></span>
+                                        </td>
+                                        <td><small th:text="${ride.createdAt != null ? #temporals.format(ride.createdAt, 'dd MMM yyyy') : '-'}"></small></td>
+                                        <td>
+                                            <a th:if="${ride.rideStatus?.name == 'ACCEPTED' or ride.rideStatus?.name == 'ON_GOING'}"
+                                               th:href="@{/driver/rides/{id}/complete(id=${ride.id})}"
+                                               class="btn btn-success btn-sm"
+                                               onclick="return confirm('Selesaikan ride ini?')">
+                                                <i class="bi bi-check2-all"></i> Selesai
+                                            </a>
+                                            <span th:if="${ride.rideStatus?.name == 'COMPLETED'}" class="text-success small">
+                                                <i class="bi bi-check-circle-fill"></i> Done
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(rides)}">
+                                        <td colspan="8" class="text-center text-muted py-4">
+                                            <i class="bi bi-clock-history fs-2 d-block mb-2"></i>Belum ada riwayat ride
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

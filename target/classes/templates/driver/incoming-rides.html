@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - OjekOnline'">Incoming Rides</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="d-flex">
+        <div th:replace="~{fragments/left-menu :: left-menu}"></div>
+        <main class="main-content flex-grow-1">
+            <div class="container-fluid p-4">
+
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle me-2"></i><span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold" th:text="${pageTitle}">Incoming Rides</h2>
+                    <a th:href="@{/driver/dashboard}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Dashboard
+                    </a>
+                </div>
+
+                <div class="row g-4">
+                    <div th:each="ride : ${rides}" class="col-md-6 col-xl-4">
+                        <div class="card border-0 shadow-sm border-top border-4 border-warning h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h6 class="fw-bold mb-0">Pesanan #<span th:text="${ride.id}"></span></h6>
+                                    <span class="badge bg-warning text-dark">PENDING</span>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="mb-1 small">
+                                        <i class="bi bi-person-fill text-primary me-2"></i>
+                                        <strong th:text="${ride.customer?.user?.fullName ?: '-'}"></strong>
+                                    </p>
+                                    <p class="mb-1 small">
+                                        <i class="bi bi-telephone text-muted me-2"></i>
+                                        <span th:text="${ride.customer?.user?.phone ?: '-'}"></span>
+                                    </p>
+                                </div>
+                                <div class="mb-3 p-2 bg-light rounded">
+                                    <p class="mb-1 small">
+                                        <i class="bi bi-record-circle text-danger me-2"></i>
+                                        <span th:text="${ride.route?.pickupLocation?.name ?: '-'}"></span>
+                                    </p>
+                                    <div class="border-start border-2 border-dashed mx-2 my-1" style="height: 15px;"></div>
+                                    <p class="mb-0 small">
+                                        <i class="bi bi-geo-alt-fill text-success me-2"></i>
+                                        <span th:text="${ride.route?.dropoffLocation?.name ?: '-'}"></span>
+                                    </p>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <small class="text-muted">Jarak</small>
+                                        <p class="fw-semibold mb-0 small" th:text="${ride.route?.distance != null ? ride.route.distance + ' km' : '-'}"></p>
+                                    </div>
+                                    <div class="text-center">
+                                        <small class="text-muted">ETA</small>
+                                        <p class="fw-semibold mb-0 small" th:text="${ride.route?.estimatedTime != null ? ride.route.estimatedTime + ' min' : '-'}"></p>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-muted">Fare</small>
+                                        <p class="fw-bold mb-0 text-success" th:text="'Rp ' + ${#numbers.formatDecimal(ride.fare, 0, 'COMMA', 0, 'POINT')}"></p>
+                                    </div>
+                                </div>
+                                <a th:href="@{/driver/rides/{id}/accept(id=${ride.id})}" class="btn btn-success w-100">
+                                    <i class="bi bi-check-circle me-2"></i>Terima Pesanan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(rides)}" class="col-12">
+                        <div class="card border-0 shadow-sm text-center py-5">
+                            <div class="card-body">
+                                <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+                                <h5 class="mt-3 text-muted">Tidak ada pesanan masuk</h5>
+                                <p class="text-muted small">Pastikan status kamu ONLINE untuk menerima pesanan</p>
+                                <a th:href="@{/driver/toggle-availability}" class="btn btn-success">
+                                    <i class="bi bi-circle-fill me-2"></i>Set Status ONLINE
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

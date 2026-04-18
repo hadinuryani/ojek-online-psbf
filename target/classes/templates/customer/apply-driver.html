@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - OjekOnline'">Apply as Driver</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="d-flex">
+        <div th:replace="~{fragments/left-menu :: left-menu}"></div>
+        <main class="main-content flex-grow-1">
+            <div class="container-fluid p-4">
+
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle me-2"></i><span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold">Daftar Jadi Driver</h2>
+                    <a th:href="@{/customer/dashboard}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Dashboard
+                    </a>
+                </div>
+
+                <!-- Already applied -->
+                <div th:if="${alreadyApplied}" class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm text-center">
+                            <div class="card-body p-5">
+                                <i class="bi bi-hourglass-split text-warning" style="font-size: 4rem;"></i>
+                                <h4 class="fw-bold mt-3">Aplikasi Sudah Dikirim</h4>
+                                <p class="text-muted">Kamu sudah mengajukan aplikasi sebagai driver.</p>
+                                <div class="alert alert-info mt-3">
+                                    <table class="table table-sm mb-0 text-start">
+                                        <tr>
+                                            <td class="text-muted">No. SIM</td>
+                                            <td><strong th:text="${driver?.licenseNumber ?: '-'}"></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">Status</td>
+                                            <td>
+                                                <span class="badge"
+                                                      th:classappend="${driver?.applicationStatus == 'APPROVED'} ? 'bg-success' : (${driver?.applicationStatus == 'REJECTED'} ? 'bg-danger' : 'bg-warning')"
+                                                      th:text="${driver?.applicationStatus}">PENDING</span>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${driver?.applicationNote != null and !driver.applicationNote.isEmpty()}">
+                                            <td class="text-muted">Catatan</td>
+                                            <td th:text="${driver?.applicationNote}"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div th:if="${driver?.applicationStatus == 'APPROVED'}" class="alert alert-success">
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                    Selamat! Aplikasi kamu disetujui. Kamu sekarang bisa login sebagai driver.
+                                </div>
+                                <div th:if="${driver?.applicationStatus == 'REJECTED'}" class="alert alert-danger">
+                                    <i class="bi bi-x-circle-fill me-2"></i>
+                                    Maaf, aplikasi kamu ditolak. Silakan hubungi admin untuk informasi lebih lanjut.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apply form -->
+                <div th:unless="${alreadyApplied}" class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="text-center mb-4">
+                                    <i class="bi bi-person-badge text-success" style="font-size: 3rem;"></i>
+                                    <h5 class="fw-bold mt-2">Formulir Pendaftaran Driver</h5>
+                                    <p class="text-muted small">Isi formulir di bawah dan tunggu persetujuan admin</p>
+                                </div>
+
+                                <div class="alert alert-info mb-4">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <strong>Info:</strong> Nama dan kontak akan diambil dari profil akun kamu.
+                                    <p class="mb-0 small mt-1">Nama: <strong th:text="${user?.fullName}"></strong> | Email: <strong th:text="${user?.email}"></strong></p>
+                                </div>
+
+                                <form th:action="@{/customer/apply-driver}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Nomor SIM <span class="text-danger">*</span></label>
+                                        <input type="text" name="licenseNumber" class="form-control" placeholder="Masukkan nomor SIM" required>
+                                        <div class="form-text">Nomor Surat Izin Mengemudi yang masih berlaku</div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label fw-semibold">Catatan / Motivasi</label>
+                                        <textarea name="applicationNote" class="form-control" rows="3"
+                                                  placeholder="Kenapa kamu ingin jadi driver OjekOnline?"></textarea>
+                                    </div>
+                                    <div class="alert alert-warning mb-4">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        Dengan mendaftar, kamu setuju untuk mematuhi aturan dan kebijakan OjekOnline sebagai mitra driver.
+                                    </div>
+                                    <button type="submit" class="btn btn-success w-100 btn-lg">
+                                        <i class="bi bi-send me-2"></i>Kirim Aplikasi
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

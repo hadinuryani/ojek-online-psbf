@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title th:text="${pageTitle} + ' - OjekOnline'">Rides</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"><link th:href="@{/css/style.css}" rel="stylesheet"></head>
+<body class="admin-body"><div th:replace="~{fragments/header :: header}"></div><div class="d-flex"><div th:replace="~{fragments/left-menu :: left-menu}"></div>
+<main class="main-content flex-grow-1"><div class="container-fluid p-4"><div th:replace="~{fragments/main-content :: alerts}"></div>
+<div class="d-flex justify-content-between align-items-center mb-4"><h2 class="fw-bold" th:text="${pageTitle}">Rides</h2><a th:href="@{/rides/create}" class="btn btn-warning"><i class="bi bi-plus-circle me-2"></i>Add Ride</a></div>
+<div class="card border-0 shadow-sm"><div class="card-body"><div class="table-responsive"><table class="table table-hover align-middle"><thead class="table-dark"><tr><th>#</th><th>Customer</th><th>Driver</th><th>Route</th><th>Status</th><th>Fare</th><th>Actions</th></tr></thead>
+<tbody><tr th:each="ride, stat : ${rides}"><td th:text="${stat.index + 1}">1</td>
+<td th:text="${ride.customer?.user?.fullName}">-</td>
+<td th:text="${ride.driver?.user?.fullName != null ? ride.driver.user.fullName : 'Unassigned'}">-</td>
+<td th:text="${ride.route?.pickupLocation?.name + ' → ' + ride.route?.dropoffLocation?.name}">-</td>
+<td><span class="badge" th:classappend="${ride.rideStatus?.name == 'COMPLETED'} ? 'bg-success' : (${ride.rideStatus?.name == 'CANCELLED'} ? 'bg-danger' : (${ride.rideStatus?.name == 'ACCEPTED'} ? 'bg-primary' : 'bg-warning'))" th:text="${ride.rideStatus?.name}">PENDING</span></td>
+<td th:text="'Rp ' + ${#numbers.formatDecimal(ride.fare, 0, 'COMMA', 0, 'POINT')}">Rp 0</td>
+<td>
+<a th:href="@{/rides/{id}(id=${ride.id})}" class="btn btn-sm btn-info"><i class="bi bi-eye"></i></a>
+<a th:if="${ride.rideStatus?.name == 'PENDING'}" th:href="@{/rides/{id}/accept(id=${ride.id})}" class="btn btn-sm btn-success" title="Accept"><i class="bi bi-check-circle"></i></a>
+<a th:if="${ride.rideStatus?.name == 'ACCEPTED' || ride.rideStatus?.name == 'ON_GOING'}" th:href="@{/rides/{id}/complete(id=${ride.id})}" class="btn btn-sm btn-primary" title="Complete"><i class="bi bi-flag"></i></a>
+<a th:href="@{/rides/{id}/delete(id=${ride.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')"><i class="bi bi-trash"></i></a>
+</td></tr>
+<tr th:if="${#lists.isEmpty(rides)}"><td colspan="7" class="text-center text-muted py-4">No data found</td></tr></tbody></table></div></div></div>
+</div><div th:replace="~{fragments/footer :: footer}"></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script></body></html>
