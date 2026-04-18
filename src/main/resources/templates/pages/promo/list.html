@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title th:text="${pageTitle} + ' - OjekOnline'">Promos</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"><link th:href="@{/css/style.css}" rel="stylesheet"></head>
+<body class="admin-body"><div th:replace="~{fragments/header :: header}"></div><div class="d-flex"><div th:replace="~{fragments/left-menu :: left-menu}"></div>
+<main class="main-content flex-grow-1"><div class="container-fluid p-4"><div th:replace="~{fragments/main-content :: alerts}"></div>
+<div class="d-flex justify-content-between align-items-center mb-4"><h2 class="fw-bold" th:text="${pageTitle}">Promos</h2><a th:href="@{/promos/create}" class="btn btn-warning"><i class="bi bi-plus-circle me-2"></i>Add</a></div>
+<div class="card border-0 shadow-sm"><div class="card-body"><div class="table-responsive"><table class="table table-hover align-middle"><thead class="table-dark"><tr><th>#</th><th>Code</th><th>Description</th><th>Discount</th><th>Valid</th><th>Active</th><th>Actions</th></tr></thead>
+<tbody><tr th:each="p, stat : ${promos}"><td th:text="${stat.index + 1}">1</td><td><code th:text="${p.code}">PROMO01</code></td><td th:text="${p.description}">-</td><td th:text="${p.discountPercent + '%'}">10%</td>
+<td th:text="${p.validFrom} + ' - ' + ${p.validUntil}">-</td>
+<td><span class="badge" th:classappend="${p.isActive} ? 'bg-success' : 'bg-secondary'" th:text="${p.isActive} ? 'Active' : 'Inactive'">Active</span></td>
+<td><a th:href="@{/promos/{id}(id=${p.id})}" class="btn btn-sm btn-info"><i class="bi bi-eye"></i></a><a th:href="@{/promos/{id}/edit(id=${p.id})}" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a><a th:href="@{/promos/{id}/delete(id=${p.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')"><i class="bi bi-trash"></i></a></td></tr>
+<tr th:if="${#lists.isEmpty(promos)}"><td colspan="7" class="text-center text-muted py-4">No data</td></tr></tbody></table></div></div></div>
+</div><div th:replace="~{fragments/footer :: footer}"></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script></body></html>

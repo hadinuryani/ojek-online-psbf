@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OjekOnline - Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-6 col-lg-5">
+                <div class="card login-card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-scooter text-warning" style="font-size: 3rem;"></i>
+                            <h3 class="fw-bold mt-2">Daftar Akun <span class="text-warning">Baru</span></h3>
+                            <p class="text-muted small">Buat akun untuk mulai menggunakan OjekOnline</p>
+                        </div>
+
+                        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            <span th:text="${errorMessage}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <form th:action="@{/register}" method="post" th:object="${user}">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="fullName" class="form-label fw-semibold">
+                                        <i class="bi bi-person me-1"></i>Nama Lengkap
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" id="fullName"
+                                           th:field="*{fullName}" placeholder="Nama lengkap" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="username" class="form-label fw-semibold">
+                                        <i class="bi bi-at me-1"></i>Username
+                                    </label>
+                                    <input type="text" class="form-control" id="username"
+                                           th:field="*{username}" placeholder="Username" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label fw-semibold">
+                                        <i class="bi bi-envelope me-1"></i>Email
+                                    </label>
+                                    <input type="email" class="form-control" id="email"
+                                           th:field="*{email}" placeholder="Email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label fw-semibold">
+                                        <i class="bi bi-phone me-1"></i>No. HP
+                                    </label>
+                                    <input type="text" class="form-control" id="phone"
+                                           th:field="*{phone}" placeholder="08xxxxxxxxxx" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label fw-semibold">
+                                        <i class="bi bi-lock me-1"></i>Password
+                                    </label>
+                                    <input type="password" class="form-control" id="password"
+                                           th:field="*{password}" placeholder="Min 6 karakter" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold mt-4">
+                                <i class="bi bi-person-plus me-2"></i>Daftar Sekarang
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">Sudah punya akun?
+                                <a th:href="@{/login}" class="text-warning fw-semibold">Login di sini</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

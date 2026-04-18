@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - OjekOnline'">Rate Ride</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="d-flex">
+        <div th:replace="~{fragments/left-menu :: left-menu}"></div>
+        <main class="main-content flex-grow-1">
+            <div class="container-fluid p-4">
+
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle me-2"></i><span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold">Beri Rating</h2>
+                    <a th:href="@{/customer/my-rides}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                    </a>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <!-- Ride Info -->
+                                <div class="text-center mb-4">
+                                    <i class="bi bi-person-circle text-secondary" style="font-size: 4rem;"></i>
+                                    <h5 class="fw-bold mt-2" th:text="${ride?.driver?.user?.fullName ?: 'Driver'}">Driver</h5>
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                        <span th:text="${ride?.route?.pickupLocation?.name ?: '-'}"></span>
+                                        → 
+                                        <i class="bi bi-geo-alt-fill text-success me-1"></i>
+                                        <span th:text="${ride?.route?.dropoffLocation?.name ?: '-'}"></span>
+                                    </p>
+                                    <p class="fw-bold text-success mt-1" th:text="'Fare: Rp ' + ${#numbers.formatDecimal(ride?.fare ?: 0, 0, 'COMMA', 0, 'POINT')}"></p>
+                                </div>
+
+                                <form th:action="@{/customer/my-rides/{id}/rate(id=${ride.id})}" method="post">
+                                    <div class="mb-4 text-center">
+                                        <label class="form-label fw-bold d-block mb-3">Rating Perjalanan</label>
+                                        <div class="mt-2">
+                                            <select name="score" class="form-select w-auto mx-auto" required>
+                                                <option value="">-- Pilih Rating --</option>
+                                                <option value="1">⭐ 1 - Sangat Buruk</option>
+                                                <option value="2">⭐⭐ 2 - Buruk</option>
+                                                <option value="3">⭐⭐⭐ 3 - Cukup</option>
+                                                <option value="4">⭐⭐⭐⭐ 4 - Baik</option>
+                                                <option value="5">⭐⭐⭐⭐⭐ 5 - Sangat Baik</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-warning btn-lg">
+                                            <i class="bi bi-star-fill me-2"></i>Kirim Rating
+                                        </button>
+                                        <a th:href="@{/customer/my-rides}" class="btn btn-outline-secondary">Lewati</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

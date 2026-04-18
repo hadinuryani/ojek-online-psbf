@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title th:text="${pageTitle} + ' - OjekOnline'">Vehicle Detail</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"><link th:href="@{/css/style.css}" rel="stylesheet"></head>
+<body class="admin-body"><div th:replace="~{fragments/header :: header}"></div><div class="d-flex"><div th:replace="~{fragments/left-menu :: left-menu}"></div>
+<main class="main-content flex-grow-1"><div class="container-fluid p-4">
+<div class="d-flex justify-content-between align-items-center mb-4"><h2 class="fw-bold" th:text="${pageTitle}">Vehicle Detail</h2><div><a th:href="@{/vehicles/{id}/edit(id=${vehicle.id})}" class="btn btn-primary"><i class="bi bi-pencil me-2"></i>Edit</a><a th:href="@{/vehicles}" class="btn btn-secondary ms-2"><i class="bi bi-arrow-left me-2"></i>Back</a></div></div>
+<div class="card border-0 shadow-sm"><div class="card-body p-4"><div class="row g-3">
+<div class="col-md-6"><label class="form-label text-muted small">Driver</label><p class="fw-semibold" th:text="${vehicle.driver?.user?.fullName}">-</p></div>
+<div class="col-md-6"><label class="form-label text-muted small">Type</label><p class="fw-semibold" th:text="${vehicle.vehicleType?.name}">-</p></div>
+<div class="col-md-6"><label class="form-label text-muted small">Plate</label><p><code th:text="${vehicle.plateNumber}">-</code></p></div>
+<div class="col-md-6"><label class="form-label text-muted small">Brand / Model</label><p class="fw-semibold" th:text="${vehicle.brand + ' ' + vehicle.model}">-</p></div>
+<div class="col-md-6"><label class="form-label text-muted small">Year</label><p class="fw-semibold" th:text="${vehicle.year}">-</p></div>
+<div class="col-md-6"><label class="form-label text-muted small">Color</label><p class="fw-semibold" th:text="${vehicle.color}">-</p></div>
+</div></div></div></div><div th:replace="~{fragments/footer :: footer}"></div></main></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script></body></html>
